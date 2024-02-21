@@ -38,7 +38,7 @@ export function Navbar() {
             onClick={()=>setTab('list')}
 
           >
-            List
+            Todo List
           </div>
         </Link>
       </div>
