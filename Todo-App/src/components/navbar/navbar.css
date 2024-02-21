@@ -1,0 +1,17 @@
+.menu{
+    text-decoration: none;
+    color: var(--textBlack);
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.menu:hover{
+    transform: scale(1.2);
+    transition: all 0.3s ease;
+    color: var(--yellow);
+
+}
+
+.menu.active{
+    transform: scale(1.2);
+    color: var(--light-blue);
+}
