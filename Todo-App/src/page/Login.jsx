@@ -2,14 +2,15 @@ import { Link } from "react-router-dom";
 
 export function Login() {
   return (
-    <div
-      className="row h-auto col-lg-5 col-md-4 col-sm-12 d-flex flex-column justify-content-start align-items-center rounded-3 "
+    <div className="container">
+      <div
+      className="row h-auto col-lg-4 col-md-4 col-sm-12 d-flex flex-column justify-content-start align-items-center rounded-3 py-4"
       style={{ backgroundColor: "var(--blue)" }}
     >
       <div className="row my-3">
         <i
-          className="col-12 bi bi-check2-square d-flex flex-column justify-content-center align-items-center text-white text-bolder"
-          style={{ fontSize: "6rem" }}
+          className="col-12 bi bi-check2-square d-flex flex-column justify-content-center align-items-center text-white my-2"
+          style={{ fontSize: "6rem", }}
         ></i>
         <div className="col fw-bold fs-2 d-flex flex-column justify-content-center align-items-center text-white">
           Login to Todo App
@@ -64,6 +65,7 @@ export function Login() {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 }

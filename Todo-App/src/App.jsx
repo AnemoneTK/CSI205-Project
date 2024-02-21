@@ -35,8 +35,8 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <div className="col-12 container">
-      <RouterProvider router={router}/>
+      <div className="row">
+        <RouterProvider router={router}/>
       </div>
     </>
   );
