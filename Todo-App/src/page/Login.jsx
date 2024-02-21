@@ -52,7 +52,7 @@ export function Login() {
             </div>
             <div className="row mt-5 mb-2 d-flex flex-column justify-content-center align-items-center ">
               <Link
-                to="/home"
+                to="/home/homepage"
                 type="submit"
                 className="col-10 btn btn-dark btn-lg"
               >

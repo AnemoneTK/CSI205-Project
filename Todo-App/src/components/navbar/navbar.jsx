@@ -3,10 +3,10 @@ import "./navbar.css";
 import { useEffect, useState } from "react";
 
 export function Navbar() {
-  const [tab, setTab] = useState("home");
+  const [tab, setTab] = useState("homepage");
 
   useEffect(() => {
-    setTab("home");
+    setTab("homepage");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -20,17 +20,17 @@ export function Navbar() {
         <div className="w-auto pl-3-0 m-0 fs-2 fw-bolder">TODO APP</div>
       </div>
       <div className="col-lg-3 d-flex flex-row justify-content-center align-items-center m-0">
-        <Link to="/home" className="col text-decoration-none  menu-box">
+        <Link to="homepage" className="col text-decoration-none  menu-box">
           <div
             className={
-              "menu text-center fs-3" + (tab == "home" ? " active" : "")
+              "menu text-center fs-3" + (tab == "homepage" ? " active" : "")
             }
-            onClick={()=>setTab('home')}
+            onClick={()=>setTab('homepage')}
           >
             Home
           </div>
         </Link>
-        <Link to="/list" className="col text-decoration-none menu-box">
+        <Link to="todoList" className="col text-decoration-none menu-box">
           <div
             className={
               "menu text-center fs-3" + (tab == "list" ? " active" : "")
