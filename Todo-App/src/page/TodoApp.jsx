@@ -1,10 +1,16 @@
-import { Navbar } from "../components/navbar";
+import { Outlet } from "react-router";
+import { Navbar } from "../components/navbar/navbar";
 
 export function TodoApp() {
   return (
-    <div className="container col-12 d-flex flex-column justify-content-start align-items-start p-0 m-0 h-100">
-        <Navbar/>
-      
+    <div className="container d-flex flex-column justify-content-start align-items-center">
+      <div className="row h-auto col-12 d-flex flex-column justify-content-start align-items-center">
+        <Navbar />
+        <div className="row p-0 m-0" >
+          <Outlet />
+        </div>
+
+      </div>
     </div>
   );
 }

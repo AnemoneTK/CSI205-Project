@@ -5,6 +5,8 @@ import {
 import "./App.css";
 import { Login } from "./page/Login";
 import { TodoApp } from "./page/TodoApp";
+import { Homepage } from "./page/Homepage";
+import { TodoList } from "./page/TodoList";
 
 
 const router = createBrowserRouter([
@@ -13,8 +15,18 @@ const router = createBrowserRouter([
     element: <Login/>,
   },
   {
-    path: "/home",
+    path: "home/*",
     element: <TodoApp/>,
+    children: [
+          {
+            path: "homepage" ,
+            element: <Homepage />,
+          },
+          {
+            path: "todoList" ,
+            element: <TodoList />,
+          },
+    ]
   },
  
   // {
@@ -35,8 +47,8 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <div className="col-12 container">
-      <RouterProvider router={router}/>
+      <div className="row">
+        <RouterProvider router={router}/>
       </div>
     </>
   );

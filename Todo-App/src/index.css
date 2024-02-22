@@ -2,9 +2,6 @@
 
 :root {
   font-family: "Prompt", Helvetica, Arial, sans-serif;
-  color-scheme: light dark;
-  background-color: var(--dark-blue);
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -21,6 +18,8 @@
   --textBlack:#1f1f1f;
   --textWhite:#ffff;
   --bg: #ffffff;
+
+  
 }
 
 *,
@@ -40,5 +39,4 @@ body {
   height: 100dvh;
   overflow: hidden;
   background-color: var(--dark-blue);
-
 }
