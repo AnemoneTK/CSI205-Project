@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { fetchTodoData } from "../../Data/TodoData";
+import "./TodoList.css";
+import { Table } from "react-bootstrap";
 
 export function TodoList() {
   const [todoList, setTodoList] = useState([]);
-  const [page, setPage] = useState(0);
-  const [numPages, setNumPages] = useState(0);
+  // const [page, setPage] = useState(0);
+  // const [numPages, setNumPages] = useState(0);
 
   const ShowTodo = todoList.map((todo) => {
     return (
       <tr key={todo.id}>
-        <th className="col-1 text-center">{todo.id}</th>
-        <td className="col-5">{todo.title}</td>
+        <td className="col text-center">{todo.id}</td>
+        <td className="col">{todo.title}</td>
         <td className="col">{todo.priority}</td>
         <td>{todo.status ? "Done" : "Waiting"}</td>
       </tr>
@@ -21,16 +23,16 @@ export function TodoList() {
     setTodoList(fetchTodoData);
   }, []);
 
-  const itemPerPage = 10;
+  // const itemPerPage = 10;
   // useEffect(()=>{
   //   const
   // }, [todoList])
 
   return (
-    <div className="container d-flex flex-column justify-content-center align-items-center">
-      <div className="row col-6 border border-1 p-3 rounded-2 bg-white">
-        <div className="col-12 p-0 mb-3">
-          <div className="d-flex flex-row justify-content-between align-items-center px-3">
+    <div className="container d-flex flex-column justify-content-center align-items-center p-0 m-0 bg-black h-auto my-3">
+      <div className="row col-7 border border-1 p-3 rounded-2 bg-white " style={{height:"600px"}}>
+        <div className="col-12 p-0 mb-1">
+          <div className="d-flex flex-row justify-content-between align-items-center px-3 py-0">
             <div className="d-flex flex-row align-items-center">
               <div className="col-auto m-0 p-0 fw-bold fs-5">
                 Item per page :
@@ -79,18 +81,22 @@ export function TodoList() {
             </div>
           </div>
         </div>
-        <table className="table col-6 table-striped ">
-          <thead className="table-dark">
-            <tr>
-              <th className="col text-center fs-5">#</th>
-              <th className="col fs-5">Title</th>
-              <th className="col fs-5">Priority</th>
-              <th className="col fs-5">Status</th>
-            </tr>
-          </thead>
-          <tbody className="">{ShowTodo}</tbody>
-        </table>
-        <div className="col-12 p-0 mt-3 d-flex flex-row justify-content-center align-items-center">
+       
+        <div className="m-0 p-0"  style={{ maxHeight: "450px", overflowY: "auto" }}>
+          <Table striped bordered hover className="table">
+            <thead style={{ position: "sticky", top: "0" }}>
+              <tr>
+                <th className="col text-center fs-5">#</th>
+                <th className="col fs-5">Title</th>
+                <th className="col fs-5">Priority</th>
+                <th className="col fs-5">Status</th>
+              </tr>
+            </thead>
+
+            <tbody>{ShowTodo}</tbody>
+          </Table>
+        </div>
+        <div className="col-12 p-0 d-flex flex-row justify-content-center align-items-center ">
           <button className="btn col-1 text-black border border-0">
             First
           </button>
