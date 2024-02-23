@@ -4,19 +4,39 @@ import "./TodoList.css";
 import { Table } from "react-bootstrap";
 
 export function TodoList() {
+  const [todoRaw, setTodoRaw] = useState([]);
+  const [doneList,setDoneList] = useState(true)
+  const [waitList,setWaitList] = useState(false)
   const [todoList, setTodoList] = useState([]);
   const [page, setPage] = useState(0);
   const [numPages, setNumPages] = useState(0);
 
-  const [itemPerPage, setItemPerPage] = useState(5);
+  const [itemPerPage, setItemPerPage] = useState("");
 
   useEffect(() => {
-    setTodoList(fetchTodoData);
+
+    setTodoRaw(fetchTodoData)
+    setItemPerPage(10);
   }, []);
+
+  useEffect(()=>{
+    const selectedItem = todoRaw.filter((todo)=>{
+      if(doneList == true && waitList == true){
+        return todo
+      }else if (doneList == false && waitList == true){
+        return !todo.status
+      }else if (waitList == false && doneList == true){
+        return todo.status
+      }else{
+        return !todo
+      }
+    })
+    setTodoList(selectedItem);
+  },[todoRaw, doneList, waitList])
 
   useEffect(() => {
     setNumPages(Math.ceil(todoList.length / itemPerPage));
-  }, [itemPerPage, todoList]);
+  }, [itemPerPage, todoList.length]);
 
   useEffect(() => {
     if (numPages == 0) {
@@ -31,7 +51,7 @@ export function TodoList() {
   }, [numPages, page]);
 
   const setStatus = (id) => {
-    const selectItem = todoList.find((todo) => {
+    const selectItem = todoRaw.find((todo) => {
       return todo.id == id;
     });
     if (selectItem.status == true) {
@@ -40,7 +60,7 @@ export function TodoList() {
       selectItem.status = true;
     }
 
-    setTodoList([...todoList, selectItem]);
+    setTodoRaw([...todoRaw, selectItem]);
   };
 
   const ShowTodo = todoList.map((todo, index) => {
@@ -50,7 +70,7 @@ export function TodoList() {
     if (index >= start && index < end) {
       return (
         <tr key={todo.id}>
-          <td className=" text-center col-1">{todo.id}</td>
+          <td className="text-center col-1">{todo.id}</td>
           <td>{todo.title}</td>
           <td
             className={
@@ -65,15 +85,23 @@ export function TodoList() {
             {todo.priority}
           </td>
           <td className="p-0 col-2">
-            <button
-              className={
-                "btn col-12 text-center rounded-0" +
-                (todo.status ? " bg-success" : " bg-warning")
-              }
-              onClick={() => setStatus(todo.id)}
-            >
-              {todo.status ? "Done" : "Waiting"}
-            </button>
+            {todo.status ? (
+              <button
+                className="border border-0 col-12 text-start rounded-0 bg-success fs-5 text-white"
+                onClick={() => setStatus(todo.id)}
+              >
+                <i className="bi bi-check2-square me-3"></i>
+                Done
+              </button>
+            ) : (
+              <button
+                className="border border-0 col-12 text-start rounded-0 bg-warning fs-5"
+                onClick={() => setStatus(todo.id)}
+              >
+                <i className="bi bi-square me-3"></i>
+                Waiting
+              </button>
+            )}
           </td>
         </tr>
       );
@@ -95,7 +123,6 @@ export function TodoList() {
                   aria-label="Default select example"
                   onChange={(event) => setItemPerPage(event.target.value)}
                 >
-                  <option value="5">5</option>
                   <option value="10">10</option>
                   <option value="15">15</option>
                   <option value="20">20</option>
@@ -113,22 +140,37 @@ export function TodoList() {
               >
                 <i className="bi bi-filter fs-2"></i>
               </button>
-              <ul className="dropdown-menu">
-                <li>
+              <ul
+                className="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <li onClick={()=>setDoneList(!doneList)}>
                   <a className="dropdown-item" href="#">
-                    All
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked = {doneList}
+                        // onChange={(e)=> setDoneList(e.target.checked)}
+                      />
+                      <label className="form-check-label">Done</label>
+                    </div>
                   </a>
                 </li>
-                <li>
+                <li onClick={()=>setWaitList(!waitList)}>
                   <a className="dropdown-item" href="#">
-                    Done
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked = {waitList}
+                        // onChange={(e)=> setWaitList(e.target.checked)}
+                      />
+                      <label className="form-check-label">Waiting</label>
+                    </div>
                   </a>
                 </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Waiting
-                  </a>
-                </li>
+               
               </ul>
             </div>
           </div>
