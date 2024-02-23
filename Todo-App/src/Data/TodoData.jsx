@@ -54,7 +54,7 @@ const TodoData = [
     id: 8,
     title: "Study",
     priority: "Medium",
-    status: false,
+    status: true,
   },
   {
     userID: 1,
@@ -68,7 +68,7 @@ const TodoData = [
     id: 10,
     title: "Wack up",
     priority: "High",
-    status: false,
+    status: true,
   },
   {
     userID: 1,

@@ -70,10 +70,10 @@ export function TopNavbar() {
             </button>
             <ul className="dropdown-menu">
               <li>
-                <a className="dropdown-item text-start " href="#">
+                <Link to="/" className="dropdown-item text-start " href="#">
                   <i className="bi bi-box-arrow-right p-3 "></i>
                   Logout
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

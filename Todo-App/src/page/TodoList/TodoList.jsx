@@ -8,8 +8,7 @@ export function TodoList() {
   const [page, setPage] = useState(0);
   const [numPages, setNumPages] = useState(0);
 
-
-  const [itemPerPage, setItemPerPage] = useState(5)
+  const [itemPerPage, setItemPerPage] = useState(5);
 
   useEffect(() => {
     setTodoList(fetchTodoData);
@@ -71,7 +70,7 @@ export function TodoList() {
                 "btn col-12 text-center rounded-0" +
                 (todo.status ? " bg-success" : " bg-warning")
               }
-              onClick={()=>setStatus(todo.id)}
+              onClick={() => setStatus(todo.id)}
             >
               {todo.status ? "Done" : "Waiting"}
             </button>
@@ -94,7 +93,7 @@ export function TodoList() {
                 <select
                   className="form-select"
                   aria-label="Default select example"
-                  onChange={event => setItemPerPage(event.target.value)}
+                  onChange={(event) => setItemPerPage(event.target.value)}
                 >
                   <option value="5">5</option>
                   <option value="10">10</option>
