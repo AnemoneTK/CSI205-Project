@@ -13,11 +13,11 @@ export function TodoList() {
     const selectItem = todoList.find((todo)=>{
       return todo.id == id
     })
-    // if(selectItem.status == false){
+    if(selectItem.status == false){
       selectItem.status = true
-    // }else{
-    //   selectItem.status = false
-    // }
+    }else{
+      selectItem.status = false
+    }
     setTodoList([ ...todoList, selectItem])
   }
 
