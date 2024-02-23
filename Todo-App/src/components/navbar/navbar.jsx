@@ -18,7 +18,7 @@ export function TopNavbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-white px-3">
       <div className="container-fluid ">
-        <div className="row">
+        <div className="row col-auto">
           <i className="w-auto bi bi-check2-square text-black fs-2 p-0 m-0"></i>
           <div className="w-auto pl-3-0 m-0 fs-2 fw-bolder">TODO APP</div>
         </div>

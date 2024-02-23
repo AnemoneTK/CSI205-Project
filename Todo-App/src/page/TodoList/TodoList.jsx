@@ -7,19 +7,42 @@ export function TodoList() {
   const [todoList, setTodoList] = useState([]);
   const [page, setPage] = useState(0);
   const [numPages, setNumPages] = useState(0);
-  const itemPerPage = 10;
+
+
+  const [itemPerPage, setItemPerPage] = useState(5)
+
+  useEffect(() => {
+    setTodoList(fetchTodoData);
+  }, []);
+
+  useEffect(() => {
+    setNumPages(Math.ceil(todoList.length / itemPerPage));
+  }, [itemPerPage, todoList]);
+
+  useEffect(() => {
+    if (numPages == 0) {
+      setPage(0);
+    } else {
+      if (page == 0) {
+        setPage(1);
+      } else if (page > numPages) {
+        setPage(numPages);
+      }
+    }
+  }, [numPages, page]);
 
   const setStatus = (id) => {
-    const selectItem = todoList.find((todo)=>{
-      return todo.id == id
-    })
-    if(selectItem.status == false){
-      selectItem.status = true
-    }else{
-      selectItem.status = false
+    const selectItem = todoList.find((todo) => {
+      return todo.id == id;
+    });
+    if (selectItem.status == true) {
+      selectItem.status = false;
+    } else {
+      selectItem.status = true;
     }
-    setTodoList([ ...todoList, selectItem])
-  }
+
+    setTodoList([...todoList, selectItem]);
+  };
 
   const ShowTodo = todoList.map((todo, index) => {
     const start = (page - 1) * itemPerPage;
@@ -42,14 +65,13 @@ export function TodoList() {
           >
             {todo.priority}
           </td>
-          {/* <td>{todo.status ? (<span className="badge bg-success ">Done</span> ) : (<span className="badge bg-warning">Waiting</span> )}</td> */}
           <td className="p-0 col-2">
             <button
               className={
                 "btn col-12 text-center rounded-0" +
                 (todo.status ? " bg-success" : " bg-warning")
               }
-              onClick={setStatus(todo.id)}
+              onClick={()=>setStatus(todo.id)}
             >
               {todo.status ? "Done" : "Waiting"}
             </button>
@@ -59,27 +81,6 @@ export function TodoList() {
     }
   });
 
-  useEffect(() => {
-    setTodoList(fetchTodoData);
-  }, []);
-
-  useEffect(() => {
-    setNumPages(Math.ceil(todoList.length / itemPerPage));
-  }, [todoList]);
-
-  useEffect(() => {
-    if (numPages == 0) {
-      setPage(0);
-    } else {
-      if (page == 0) {
-        setPage(1);
-      } else if (page > numPages) {
-        setPage(numPages);
-      }
-    }
-  }, [numPages, page]);
-
-  
   return (
     <div className="container pt-5 align-items-start">
       <div className="row col-lg-7 col-md-10 col-sm-10 border border-1 rounded-2 bg-white p-3">
@@ -93,7 +94,9 @@ export function TodoList() {
                 <select
                   className="form-select"
                   aria-label="Default select example"
+                  onChange={event => setItemPerPage(event.target.value)}
                 >
+                  <option value="5">5</option>
                   <option value="10">10</option>
                   <option value="15">15</option>
                   <option value="20">20</option>
@@ -134,9 +137,9 @@ export function TodoList() {
 
         <div
           className="m-0 p-0"
-          style={{ minHeight: "500px", maxHeight: "500px", overflowY: "auto" }}
+          style={{ minHeight: "50dvh", maxHeight: "50dvh", overflowY: "auto" }}
         >
-          <Table striped bordered hover responsive="sm">
+          <Table striped bordered hover responsive="sm" size="sm">
             <thead
               className="table-dark"
               style={{ position: "sticky", top: "0" }}
