@@ -1,38 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchTodoData } from "../../Data/TodoData";
 import "./TodoList.css";
-import { Table } from "react-bootstrap";
+import { Button, Modal, Table } from "react-bootstrap";
 
 export function TodoList() {
   const [todoRaw, setTodoRaw] = useState([]);
-  const [doneList,setDoneList] = useState(true)
-  const [waitList,setWaitList] = useState(false)
+  const [doneList, setDoneList] = useState(true);
+  const [waitList, setWaitList] = useState(true);
   const [todoList, setTodoList] = useState([]);
   const [page, setPage] = useState(0);
   const [numPages, setNumPages] = useState(0);
 
   const [itemPerPage, setItemPerPage] = useState("");
 
-  useEffect(() => {
+  const [show, setShow] = useState(false);
 
-    setTodoRaw(fetchTodoData)
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const idRef = useRef();
+  const titleRef = useRef();
+  const priorityRef = useRef();
+
+  const AddTodo = () =>{
+
+    const todo = {
+      userID: 1,
+      id: Number(idRef.current.innerText),
+      title: titleRef.current.value,
+      priority: priorityRef.current.value,
+      status: false,
+    }
+    setTodoRaw([...todoRaw, todo])
+    idRef.current.innerText=''
+    titleRef.current.value=''
+    priorityRef.current.value=''
+    handleClose()
+  }
+
+  useEffect(() => {
+    setTodoRaw(fetchTodoData);
     setItemPerPage(10);
   }, []);
 
-  useEffect(()=>{
-    const selectedItem = todoRaw.filter((todo)=>{
-      if(doneList == true && waitList == true){
-        return todo
-      }else if (doneList == false && waitList == true){
-        return !todo.status
-      }else if (waitList == false && doneList == true){
-        return todo.status
-      }else{
-        return !todo
+  useEffect(() => {
+    const selectedItem = todoRaw.filter((todo) => {
+      if (doneList == true && waitList == true) {
+        return todo;
+      } else if (doneList == false && waitList == true) {
+        return !todo.status;
+      } else if (waitList == false && doneList == true) {
+        return todo.status;
+      } else {
+        return !todo;
       }
-    })
+    });
     setTodoList(selectedItem);
-  },[todoRaw, doneList, waitList])
+  }, [todoRaw, doneList, waitList]);
 
   useEffect(() => {
     setNumPages(Math.ceil(todoList.length / itemPerPage));
@@ -59,8 +83,14 @@ export function TodoList() {
     } else {
       selectItem.status = true;
     }
-
     setTodoRaw([...todoRaw, selectItem]);
+  };
+
+  const DeleteItem = (id) => {
+    const selectItem = todoRaw.filter((todo) => {
+      return todo.id !== id;
+    });
+    setTodoRaw(selectItem);
   };
 
   const ShowTodo = todoList.map((todo, index) => {
@@ -84,10 +114,10 @@ export function TodoList() {
           >
             {todo.priority}
           </td>
-          <td className="p-0 col-2">
+          <td className="p-0 m-0 col-lg-2 col-md-5 col-sm-5">
             {todo.status ? (
               <button
-                className="border border-0 col-12 text-start rounded-0 bg-success fs-5 text-white"
+                className="border border-0 col-9 text-start rounded-0 bg-success fs-5 text-white"
                 onClick={() => setStatus(todo.id)}
               >
                 <i className="bi bi-check2-square me-3"></i>
@@ -95,13 +125,21 @@ export function TodoList() {
               </button>
             ) : (
               <button
-                className="border border-0 col-12 text-start rounded-0 bg-warning fs-5"
+                className="border border-0 col-9 text-start rounded-0 bg-warning fs-5"
                 onClick={() => setStatus(todo.id)}
               >
                 <i className="bi bi-square me-3"></i>
                 Waiting
               </button>
             )}
+            <button
+              className="border border-0 col-3 text-start rounded-0 bg-danger fs-5 text-white text-center"
+              onClick={() => {
+                DeleteItem(todo.id);
+              }}
+            >
+              <i className="bi bi-trash3"></i>
+            </button>
           </td>
         </tr>
       );
@@ -110,6 +148,45 @@ export function TodoList() {
 
   return (
     <div className="container pt-5 align-items-start">
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            Todo ID :{" "}
+            <span className="badge bg-primary fs-5" ref={idRef}>
+              {todoRaw.reduce((prev, cur) => {
+                return cur.id > prev ? cur.id : prev;
+              }, 0) + 1}
+            </span>
+          </div>
+          <div className="my-2">
+            Title :{" "}
+            <input type="text" className="form-control" ref={titleRef} />
+          </div>
+          <div>
+            Priority :
+            <select
+              className="form-select col"
+              aria-label="Default select example"
+              ref={priorityRef}
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={()=> AddTodo()}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <div className="row col-lg-7 col-md-10 col-sm-10 border border-1 rounded-2 bg-white p-3">
         <div className="col-12 p-0 mb-1">
           <div className="d-flex flex-row justify-content-between align-items-center px-3 py-2">
@@ -131,9 +208,16 @@ export function TodoList() {
               </div>
             </div>
 
-            <div className="dropdown">
+            <div className="dropdown row">
               <button
-                className="btn dropdown-toggle py-0 px-2 border border-0"
+                className="col-auto btn d-flex justify-content-between align-items-center mx-2 fs-5 fw-bold border border-0"
+                onClick={handleShow}
+              >
+                <i className="bi bi-plus-square me-2"></i>
+                Add
+              </button>
+              <button
+                className="col btn dropdown-toggle py-0 px-2 border border-0"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -144,33 +228,30 @@ export function TodoList() {
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton"
               >
-                <li onClick={()=>setDoneList(!doneList)}>
+                <li onClick={() => setDoneList(!doneList)}>
                   <a className="dropdown-item" href="#">
                     <div className="form-check">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        checked = {doneList}
-                        // onChange={(e)=> setDoneList(e.target.checked)}
+                        checked={doneList}
                       />
                       <label className="form-check-label">Done</label>
                     </div>
                   </a>
                 </li>
-                <li onClick={()=>setWaitList(!waitList)}>
+                <li onClick={() => setWaitList(!waitList)}>
                   <a className="dropdown-item" href="#">
                     <div className="form-check">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        checked = {waitList}
-                        // onChange={(e)=> setWaitList(e.target.checked)}
+                        checked={waitList}
                       />
                       <label className="form-check-label">Waiting</label>
                     </div>
                   </a>
                 </li>
-               
               </ul>
             </div>
           </div>
@@ -196,17 +277,18 @@ export function TodoList() {
             <tbody className="h-auto border ">{ShowTodo}</tbody>
           </Table>
         </div>
-        <div className="col-12 pt-3 px-0 m-0 d-flex flex-row justify-content-between align-items-center">
+        <div className="col-12 pt-3 px-0 m-0 d-flex flex-row justify-content-center align-items-center">
           <button
-            className="btn btn-outline-primary btn-lg text-black col-3"
+            className="btn border border-0 btn-lg text-black col-1"
             onClick={() => {
               setPage(1);
             }}
+            disabled={page == 1 ? true : false}
           >
-            First
+            <i className="bi bi-chevron-double-left text-black fs-3"></i>
           </button>
           <button
-            className="btn border border-0 col"
+            className="btn border border-0 col-1"
             onClick={() => {
               if (page > 1) {
                 setPage((p) => p - 1);
@@ -219,7 +301,7 @@ export function TodoList() {
             {page} / {numPages}
           </div>
           <button
-            className="btn border border-0 col"
+            className="btn border border-0 col-1"
             onClick={() => {
               if (page < numPages) {
                 setPage((p) => p + 1);
@@ -229,12 +311,13 @@ export function TodoList() {
             <i className="bi bi-caret-right-fill text-black fs-3"></i>
           </button>
           <button
-            className="btn btn-outline-primary btn-lg text-black col-3"
+            className="btn border border-0 btn-lg text-black col-1"
             onClick={() => {
               setPage(numPages);
             }}
+            disabled={page == numPages ? true : false}
           >
-            Last
+            <i className="bi bi-chevron-double-right text-black fs-3"></i>
           </button>
         </div>
       </div>

@@ -3,19 +3,19 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./App.css";
-import { Login } from "./page/Login";
+// import { Login } from "./page/Login";
 import { TodoApp } from "./page/TodoApp";
 import { Homepage } from "./page/Homepage";
 import { TodoList } from "./page/TodoList/TodoList";
 
 
 const router = createBrowserRouter([
+  // {
+  //   path: "/",
+  //   element: <Login/>,
+  // },
   {
-    path: "/",
-    element: <Login/>,
-  },
-  {
-    path: "home/*",
+    path: "/*",
     element: <TodoApp/>,
     children: [
           {
